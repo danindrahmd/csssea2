@@ -6,7 +6,7 @@ import game.ui.ObjectGraphic;
  * Represents the player's ship.
  */
 public class Ship extends Controllable {
-    private static final int STARTING_health = 100;
+    private static final int STARTING_HEALTH = 100;
     private static final int STARTING_SCORE = 0;
     private static final int STARTING_X = 5;
     private static final int STARTING_Y = 10;
@@ -35,7 +35,7 @@ public class Ship extends Controllable {
      * By default, a ship should be at position x = 5 and y = 10, with 100 points of health.<br>
      */
     public Ship() {
-        this(STARTING_X, STARTING_Y, STARTING_health);
+        this(STARTING_X, STARTING_Y, STARTING_HEALTH);
     }
 
     /**
@@ -91,7 +91,7 @@ public class Ship extends Controllable {
      *
      * @return the current health.
      */
-    public int gethealth() {
+    public int getHealth() {
         return health;
     }
 
