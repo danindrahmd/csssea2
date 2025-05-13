@@ -52,12 +52,15 @@ public class AchievementManager {
     /**
      * Sets the progress of the specified achievement to a given amount.
      *
-     * @param achievementName      the name of the achievement
+     * @param achievementName the name of the achievement
      * @param absoluteProgressValue the value the achievement's progress will be set to
      * @throws IllegalArgumentException if name is invalid or not found
      * @requires achievementName is a non-null, non-empty string identifying a registered achievement
      */
-    public void updateAchievement(String achievementName, double absoluteProgressValue) {
+    public void updateAchievement(
+            String achievementName,
+            double absoluteProgressValue
+    ) {
         if (achievementName == null || achievementName.isEmpty()) {
             throw new IllegalArgumentException("Invalid achievement name.");
         }
@@ -67,6 +70,7 @@ public class AchievementManager {
         }
         achievement.setProgress(absoluteProgressValue);
     }
+
 
     /**
      * Returns a list of all registered achievements.
