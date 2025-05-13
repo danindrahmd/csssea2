@@ -20,7 +20,7 @@ public class GameController {
     private final long endTime;
     private final UI ui;
     private final GameModel model;
-    private final AchievementManager aManager;
+    private final AchievementManager achievementManager;
     private boolean isPaused = false;
 
     /**
@@ -38,19 +38,19 @@ public class GameController {
      *
      * @param ui the UI used to draw the Game
      * @param model the model used to maintain game information
-     * @param aManager the manager used to maintain achievement information
+     * @param achievementManager the manager used to maintain achievement information
      *
      * @requires ui is not null
      * @requires model is not null
      * @requires achievementManager is not null
      * @provided
      */
-    public GameController(UI ui, GameModel model, AchievementManager aManager) {
+    public GameController(UI ui, GameModel model, AchievementManager achievementManager) {
         this.ui = ui;
         ui.start();
         this.model = model;
         this.endTime = System.currentTimeMillis(); // Current time
-        this.aManager = aManager;
+        this.achievementManager = achievementManager;
     }
 
 
@@ -60,14 +60,14 @@ public class GameController {
      * The start time System.currentTimeMillis() should be stored as a long.<br>
      *
      * @param ui    the UI used to draw the Game
-     * @param aManager the manager used to maintain achievement information
+     * @param achievementManager the manager used to maintain achievement information
      *
      * @requires ui is not null
      * @requires achievementManager is not null
      * @provided
      */
-    public GameController(UI ui, AchievementManager aManager) {
-        this(ui, new GameModel(ui::log, new PlayerStatsTracker()), aManager);
+    public GameController(UI ui, AchievementManager achievementManager) {
+        this(ui, new GameModel(ui::log, new PlayerStatsTracker()), achievementManager);
     }
 
     /**
@@ -132,10 +132,12 @@ public class GameController {
         sb.append("Shots Fired: ").append(getStatsTracker().getShotsFired()).append("\n");
         sb.append("Shots Hit: ").append(getStatsTracker().getShotsHit()).append("\n");
         sb.append("Enemies Destroyed: ").append(getStatsTracker().getShotsHit()).append("\n");
-        sb.append("Survival Time: ").append(getStatsTracker().getElapsedSeconds()).append(" seconds\n");
+        sb.append("Survival Time: ")
+                .append(getStatsTracker().getElapsedSeconds())
+                .append(" seconds\n");
 
 
-        List<Achievement> achievements= aManager.getAchievements();
+        List<Achievement> achievements= achievementManager.getAchievements();
         for (Achievement ach : achievements) {
             double progressPercent = ach.getProgress() * 100;
             sb.append(ach.getName())
@@ -208,9 +210,9 @@ public class GameController {
         double accuracy = fired > 0 ? (double) hits / fired : 0.0;
         double sharpShooterProgress = (fired > 10) ? Math.min(1.0, accuracy / 0.99) : 0.0;
 
-        aManager.updateAchievement("Survivor", survivorProgress);
-        aManager.updateAchievement("Enemy Exterminator", exterminatorProgress);
-        aManager.updateAchievement("Sharp Shooter", sharpShooterProgress);
+        achievementManager.updateAchievement("Survivor", survivorProgress);
+        achievementManager.updateAchievement("Enemy Exterminator", exterminatorProgress);
+        achievementManager.updateAchievement("Sharp Shooter", sharpShooterProgress);
 
         ui.setAchievementProgressStat("Survivor", survivorProgress);
         ui.setAchievementProgressStat("Enemy Exterminator", exterminatorProgress);
@@ -222,7 +224,7 @@ public class GameController {
             ui.log("Sharp Shooter progress: " + (int) (sharpShooterProgress * 100) + "%");
         }
 
-        aManager.logAchievementMastered();
+        achievementManager.logAchievementMastered();
     }
 
     /**
@@ -232,7 +234,9 @@ public class GameController {
      * @requires input is a single character
      */
     public void handlePlayerInput(String input) {
-        if (input == null || input.length() != 1) return;
+        if (input == null || input.length() != 1) {
+            return;
+        }
 
         char key = Character.toUpperCase(input.charAt(0));
 
@@ -243,8 +247,10 @@ public class GameController {
         }
 
         // No input allowed while paused
-        if (isPaused) return;
-
+        if (isPaused) {
+            return;
+        }
+        
         boolean moved = false;
 
         switch (key) {
