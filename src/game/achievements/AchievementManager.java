@@ -46,7 +46,8 @@ public class AchievementManager {
         if (achievementMap.containsKey(achievement.getName())) {
             throw new IllegalArgumentException(
                     "Achievement already registered: " + achievement.getName()
-            );        }
+            );
+        }
         achievementMap.put(achievement.getName(), achievement);
     }
 
