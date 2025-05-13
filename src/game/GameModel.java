@@ -196,7 +196,8 @@ public class GameModel {
         spawnRate += SPAWN_RATE_INCREASE;
         if (verbose) {
             wrter.log("Level Up! Welcome to Level " + lvl + ". Spawn rate increased to "
-                + spawnRate + "%.");}
+                    + spawnRate + "%.");
+        }
     }
 
     /**
@@ -210,7 +211,8 @@ public class GameModel {
         int bulletY = boat.getY(); // Core.Bullet starts just above the ship
         spaceObjects.add(new Bullet(bulletX, bulletY));
         if (verbose) {
-            wrter.log("Core.Bullet fired!");}
+            wrter.log("Core.Bullet fired!");
+        }
     }
 
     /**
@@ -243,23 +245,29 @@ public class GameModel {
                     case PowerUp powerUp -> {
                         powerUp.applyEffect(boat);
                         if (verbose) {
-                            wrter.log("Power-up collected: " + obj.render());}
+                            wrter.log("Power-up collected: " + obj.render());
+                        }
                     }
                     case Asteroid asteroid -> {
                         boat.takeDamage(ASTEROID_DAMAGE);
                         if (verbose) {
-                            wrter.log("Hit by asteroid! Health reduced by " + ASTEROID_DAMAGE + ".");}
+                            wrter.log("Hit by asteroid! Health reduced by "
+                                    + ASTEROID_DAMAGE + ".");
+                        }
                     }
                     case Enemy enemy -> {
                         boat.takeDamage(ENEMY_DAMAGE);
                         if (verbose) {
-                            wrter.log("Hit by enemy! Health reduced by " + ENEMY_DAMAGE + ".");}
+                            wrter.log("Hit by enemy! Health reduced by "
+                                    + ENEMY_DAMAGE + ".");
+                        }
                     }
                     default -> {
                     }
                 }
                 if (verbose) {
-                    wrter.log("Collision with: " + obj);}
+                    wrter.log("Collision with: " + obj);
+                }
                 toRemove.add(obj);
                 continue;
             }
@@ -287,6 +295,7 @@ public class GameModel {
 
         spaceObjects.removeAll(toRemove); // Remove all collided objects
     }
+    
     /**
      * Sets the verbose flag.
      * @param verbose whether verbose logging should be enabled

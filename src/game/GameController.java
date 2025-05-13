@@ -137,7 +137,7 @@ public class GameController {
                 .append(" seconds\n");
 
 
-        List<Achievement> achievements= achievementManager.getAchievements();
+        List<Achievement> achievements = achievementManager.getAchievements();
         for (Achievement ach : achievements) {
             double progressPercent = ach.getProgress() * 100;
             sb.append(ach.getName())
@@ -250,7 +250,7 @@ public class GameController {
         if (isPaused) {
             return;
         }
-        
+
         boolean moved = false;
 
         switch (key) {
