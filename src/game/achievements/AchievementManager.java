@@ -44,8 +44,9 @@ public class AchievementManager {
             throw new IllegalArgumentException("Achievement must not be null.");
         }
         if (achievementMap.containsKey(achievement.getName())) {
-            throw new IllegalArgumentException("Achievement already registered: " + achievement.getName());
-        }
+            throw new IllegalArgumentException(
+                    "Achievement already registered: " + achievement.getName()
+            );        }
         achievementMap.put(achievement.getName(), achievement);
     }
 
