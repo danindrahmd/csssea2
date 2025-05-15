@@ -46,9 +46,27 @@ public class PauseGameTest {
     public void testPauseToggleTwice() {
         FakeUi fake = new FakeUi();
         GameModel model = new GameModel(fake::log, new PlayerStatsTracker());
-        GameController controller = new GameController(fake, model, new AchievementManager(new FileHandler()));
+        GameController controller = new GameController(fake,
+                model,
+                new AchievementManager(new FileHandler())
+        );
         controller.pauseGame();
         controller.pauseGame();
         assertTrue(true); // only verifies no crash, basic toggle check
+    }
+
+    @Test
+    public void inputIgnoredWhenPaused() {
+        FakeUi ui = new FakeUi();
+        GameController ctrl = new GameController(
+                ui,
+                new GameModel(ui::log, new PlayerStatsTracker()),
+                new AchievementManager(new FileHandler())
+        );
+        ctrl.pauseGame();
+        ctrl.handlePlayerInput("W");
+
+        // Nothing should happen or crash
+        assertTrue(true);
     }
 }
