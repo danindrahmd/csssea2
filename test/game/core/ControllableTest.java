@@ -4,64 +4,58 @@ import game.*;
 import game.achievements.AchievementManager;
 import game.achievements.FileHandler;
 import game.achievements.PlayerStatsTracker;
+import game.exceptions.BoundaryExceededException;
 import game.ui.UI;
 import game.utility.Direction;
-import org.junit.Test;
 
+import org.junit.Test;
 import static org.junit.Assert.*;
 
 /**
- * Tests for movement boundaries and paused input.
+ * Tests for movement bounds and paused state.
  */
 public class ControllableTest {
 
-    /**
-     * Moving up out of the grid should throw an exception.
-     */
     @Test
     public void moveThrowsOutOfBounds() {
-        Controllable player = new Ship(0, 0, 100);
+        Controllable ship = new Ship(0, 0, 100);
         try {
-            player.move(Direction.UP);
-            fail("Expected exception not thrown");
-        } catch (IndexOutOfBoundsException e) {
-            // Test passes
+            ship.move(Direction.UP); // should go out of top bound
+            fail("Expected BoundaryExceededException");
+        } catch (BoundaryExceededException e) {
+            // OK
         }
     }
 
-    /**
-     * Exception message must match expected message when moving out of bounds.
-     */
     @Test
     public void moveThrowsCorrectMessage() {
-        Controllable player = new Ship(0, 0, 100);
+        Controllable ship = new Ship(0, 0, 100);
         try {
-            player.move(Direction.UP);
-            fail("Expected exception not thrown");
-        } catch (IndexOutOfBoundsException e) {
-            assertEquals("Move would exceed bounds.", e.getMessage());
+            ship.move(Direction.UP);
+            fail("Expected BoundaryExceededException");
+        } catch (BoundaryExceededException e) {
+            assertEquals("Out of bounds", e.getMessage()); // match required message
         }
     }
 
-    /**
-     * Movement should not happen when paused.
-     */
     @Test
     public void noMoveWhenPaused() {
         FakeUi ui = new FakeUi();
-        GameController controller = new GameController(ui, new GameModel(ui::log, new PlayerStatsTracker()), new AchievementManager(new FileHandler()));
+        GameModel model = new GameModel(ui::log, new PlayerStatsTracker());
+        GameController ctrl = new GameController(ui, model, new AchievementManager(new FileHandler()));
 
-        controller.pauseGame();
-        int beforeX = controller.getModel().getShip().getX();
-        int beforeY = controller.getModel().getShip().getY();
+        ctrl.pauseGame(); // toggle to paused
 
-        controller.handlePlayerInput("W");
+        int xBefore = model.getShip().getX();
+        int yBefore = model.getShip().getY();
 
-        int afterX = controller.getModel().getShip().getX();
-        int afterY = controller.getModel().getShip().getY();
+        ctrl.handlePlayerInput("W");
 
-        assertEquals(beforeX, afterX);
-        assertEquals(beforeY, afterY);
+        int xAfter = model.getShip().getX();
+        int yAfter = model.getShip().getY();
+
+        assertEquals(xBefore, xAfter);
+        assertEquals(yBefore, yAfter);
     }
 
     /**
